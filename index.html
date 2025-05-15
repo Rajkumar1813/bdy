@@ -1,1 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oops! Something Went Wrong</title>
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --secondary-color: #57606f;
+            --bg-color: #f1f2f6;
+            --text-color: #2f3542;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .error-container {
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .error-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #ff4757, #ff6b81, #ff6348, #ff4757);
+            background-size: 400% 400%;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 30px;
+            color: var(--secondary-color);
+        }
+
+        p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 30px;
+        }
+
+        .emoji {
+            font-size: clamp(4rem, 10vw, 6rem);
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.6);
+            background: #ff6b81;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            box-shadow: 0 5px 15px rgba(87, 96, 111, 0.4);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(87, 96, 111, 0.6);
+            background: #747d8c;
+        }
+
+        .error-details {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-family: monospace;
+            text-align: left;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .error-details.show {
+            max-height: 200px;
+            margin-top: 20px;
+        }
+
+        .toggle-details {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 30px 20px;
+            }
+            
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="error-container">
+        <div class="emoji">😕</div>
+        <h1>OOPS!</h1>
+        <h2>Tera bdy gift..! Tu khoo chuki h ye hak..!</h2>
+        <p>Tere liye socha to bahut kuj tha pr tune bhi sabhit kar diya ki tu bhi sab ladkiyo ki tarah hai..!</p>
+        
+        <div class="btn-container">
+            <a href="https://instagram.com/ohi_abhist" target="_blank" class="btn">Go to Homepage</a>
+            <a href="https://instagram.com/ohi_abhist" target="_blank" class="btn btn-secondary">Contact Support</a>
+        </div>
+        
+        <button class="toggle-details" id="toggleDetails">Show Details</button>
+        <div class="error-details" id="errorDetails">
+            Error 404: Page not found<br>
+            Requested URL: /nonexistent-page<br>
+            Timestamp: <span id="timestamp"></span><br>
+            User Agent: <span id="userAgent"></span>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toString();
+        
+        // Set user agent
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        
+        // Toggle error details
+        document.getElementById('toggleDetails').addEventListener('click', function() {
+            const details = document.getElementById('errorDetails');
+            details.classList.toggle('show');
+            this.textContent = details.classList.contains('show') ? 'Hide Details' : 'Show Details';
+        });
+        
+        // Create floating particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = `rgba(255, ${Math.floor(Math.random() * 100 + 71)}, ${Math.floor(Math.random() * 100 + 87)}, ${Math.random() * 0.5 + 0.2})`;
+                particle.style.borderRadius = '50%';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.left = Math.random() * 100 + 'vw';
+                
+                // Animation
+                const duration = Math.random() * 20 + 10;
+                particle.style.animation = `float ${duration}s linear infinite`;
+                
+                // Keyframes
+                const keyframes = `
+                    @keyframes float {
+                        0% {
+                            transform: translate(0, 0) rotate(0deg);
+                            opacity: ${Math.random() * 0.5 + 0.2};
+                        }
+                        50% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg);
+                            opacity: ${Math.random() * 0.5 + 0.5};
+                        }
+                        100% {
+                            transform: translate(0, 0) rotate(360deg);
+                            opacity: ${Math.random() * 0.5 + 0.2};
+                        }
+                    }
+                `;
+                
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document.head.appendChild(style);
+                
+                particles.appendChild(particle);
+            }
+        }
+        
+        // Initialize particles
+        createParticles();
+        
+        // Change emoji every 3 seconds
+        const emojis = ['😕', '😞', '😟', '🤔', '🙁', '😣', '😖'];
+        const emojiElement = document.querySelector('.emoji');
+        
+        setInterval(() => {
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            emojiElement.textContent = randomEmoji;
+        }, 3000);
+    </script>
+</body>
+</html>
